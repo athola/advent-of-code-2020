@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <getopt.h>
+#include <sys/stat.h>
 
 #define no_argument 0
 #define required_argument 1
@@ -46,6 +47,7 @@ void calculate_sum(std::string filename, uint32_t sum, uint16_t count) {
                     std::cout << read_values[i] << " * "
                               << read_values[index + 1]
                               << " equals " << product << std::endl;
+                    return;
                 }
             } else {
                 uint16_t index_2 = index + 1;
@@ -64,6 +66,7 @@ void calculate_sum(std::string filename, uint32_t sum, uint16_t count) {
                                       << read_values[index + 1] << " * "
                                       << read_values[index_2 + 1]
                                       << " equals " << product << std::endl;
+                            return;
                         }
                     }
                     index_2++;
@@ -72,6 +75,8 @@ void calculate_sum(std::string filename, uint32_t sum, uint16_t count) {
             index++;
         }
     }
+    std::cout << "Could not find " << count << " numbers which add up to "
+              << sum << std::endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -80,11 +85,12 @@ int main(int argc, char* argv[]) {
     uint16_t count = 0;
     std::string usage = "Help/Usage Example: ";
     std::string script_name = "day_1_report_repair.o ";
-    std::string args = "-f <filename> -s <sum> -c <count>";
+    std::string args = "-f <filename> -s <sum> -c <count> ";
     std::string bools = "-h";
     usage.append(filename);
     usage.append(args);
     usage.append(bools);
+
     int cmd;
     while ((cmd = getopt_long(argc, argv, optstring, longopts, NULL)) != -1) {
         switch (cmd) {
@@ -105,12 +111,26 @@ int main(int argc, char* argv[]) {
                 break;
         }
     }
+
     if (sum == 0 || count == 0 || filename == "") {
-        std::cout << "Required arguments not entered - please enter filename, "
+        std::cerr << "Required arguments not entered - please enter filename, "
                   << "sum, and count." << std::endl;
-        return 2;
-    } else {
-        calculate_sum(filename, sum, count);
+        return -1;
     }
+
+    if (count != 2 && count != 3) {
+        std::cerr << "Provided count of numbers used for sum must be 2 or 3."
+                  << std::endl;
+        return -1;
+    }
+
+    struct stat buffer;
+    if (stat(filename.c_str(), &buffer) != 0) {
+        std::cerr << "Provided filename does not exist." << std::endl;
+        return -1;
+    }
+
+    calculate_sum(filename, sum, count);
+
     return 0;
 }
