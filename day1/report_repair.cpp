@@ -1,13 +1,16 @@
-/* day_1_report_repair.cpp */
-/* Day 1 of advent of code 2020 */
-/* Currently being built using g++ */
-/* Linux Build: `g++ day_1_report_repair.cpp -o day_1_report_repair.o` */
+/* report_repair.cpp 
+ * Day 1 of advent of code 2020 
+ * Currently being built using g++ 
+ * Linux Build: `g++ report_repair.cpp -o report_repair.o`
+ * Copyright: Alex Thola 12/02/2020
+ */
+
+#include <getopt.h>
+#include <sys/stat.h>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
-#include <getopt.h>
-#include <sys/stat.h>
 
 #define no_argument 0
 #define required_argument 1
@@ -29,50 +32,49 @@ void calculate_sum(std::string filename, uint32_t sum, uint16_t count) {
     input_file.open(filename);
     if (input_file.is_open()) {
         std::string read_string;
-        while(getline(input_file, read_string)) {
+        while (getline(input_file, read_string)) {
             int read_int = std::stoi(read_string);
             read_values.push_back(read_int);
         }
         input_file.close();
     }
-    for (uint16_t i = 0; i < read_values.size(); i++) {
-        uint16_t index = i;
-        while (index + 1 < read_values.size()) {
-            if (count == 2) {
-                if ((read_values[i] + read_values[index + 1]) == sum) {
+    if (count == 2) {
+        for (uint16_t i = 0; i < read_values.size(); i++) {
+            for (uint16_t index = i + 1; index < read_values.size(); index++) {
+                if ((read_values[i] + read_values[index]) == sum) {
                     std::cout << read_values[i] << " + "
-                              << read_values[index + 1]
+                              << read_values[index]
                               << " equals " << sum << std::endl;
-                    uint64_t product = read_values[i] * read_values[index + 1];
+                    uint64_t product = read_values[i] * read_values[index];
                     std::cout << read_values[i] << " * "
-                              << read_values[index + 1]
+                              << read_values[index]
                               << " equals " << product << std::endl;
                     return;
                 }
-            } else {
-                uint16_t index_2 = index + 1;
-                while (index_2 + 1 < read_values.size()) {
-                    if (count == 3) {
-                        if ((read_values[i] + read_values[index + 1]
-                                + read_values[index_2 + 1]) == sum) {
-                            std::cout << read_values[i] << " + "
-                                      << read_values[index + 1] << " + "
-                                      << read_values[index_2 + 1]
-                                      << " equals " << sum << std::endl;
-                            uint64_t product =
-                                    read_values[i] * read_values[index + 1]
-                                                   * read_values[index_2 + 1];
-                            std::cout << read_values[i] << " * "
-                                      << read_values[index + 1] << " * "
-                                      << read_values[index_2 + 1]
-                                      << " equals " << product << std::endl;
-                            return;
-                        }
+            }
+        }
+    } else if (count == 3) {
+        for (uint16_t i = 0; i < read_values.size(); i++) {
+            for (uint16_t index = i + 1; index < read_values.size(); index++) {
+                for (uint16_t index_2 = index + 1; index_2 < read_values.size();
+                        index_2++) {
+                    if ((read_values[i] + read_values[index]
+                            + read_values[index_2]) == sum) {
+                        std::cout << read_values[i] << " + "
+                                  << read_values[index] << " + "
+                                  << read_values[index_2]
+                                  << " equals " << sum << std::endl;
+                        uint64_t product =
+                                read_values[i] * read_values[index]
+                                               * read_values[index_2];
+                        std::cout << read_values[i] << " * "
+                                  << read_values[index] << " * "
+                                  << read_values[index_2]
+                                  << " equals " << product << std::endl;
+                        return;
                     }
-                    index_2++;
                 }
             }
-            index++;
         }
     }
     std::cout << "Could not find " << count << " numbers which add up to "

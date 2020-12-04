@@ -1,17 +1,19 @@
-/* day_2_password_philosophy.cpp
+/* password_philosophy.cpp
  * Day 2 of advent of code 2020
  * Currently being built using g++
  * Linux Build:
- *  `g++ day_2_password_philosophy.cpp -o day_2_password_philosophy.o`
+ * `g++ password_philosophy.cpp -o password_philosophy.o`
+ * Copyright: Alex Thola 12/03/2020
  */
+
+#include <getopt.h>
+#include <sys/stat.h>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <vector>
-#include <getopt.h>
-#include <sys/stat.h>
 
 #define no_argument 0
 #define required_argument 1
@@ -74,7 +76,7 @@ void validate_passwords(std::string filename, bool position) {
                         || (ub_char == policy_char && lb_char != policy_char)) {
                     valid_password_count++;
                 }
-            }       
+            }
         }
         input_file.close();
     }
