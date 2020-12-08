@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
     uint32_t sum = 0;
     uint16_t count = 0;
     std::string usage = "Help/Usage Example: ";
-    std::string script_name = "day_1_report_repair.o ";
+    std::string script_name = "report_repair.o ";
     std::string args = "-f <filename> -s <sum> -c <count> ";
     std::string bools = "-h";
     usage.append(filename);

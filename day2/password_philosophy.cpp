@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
     std::string filename = "";
     bool password_position = false;
     std::string usage = "Help/Usage Example: ";
-    std::string script_name = "day_1_report_repair.o ";
+    std::string script_name = "password_philosophy.o ";
     std::string args = "-f <filename> ";
     std::string bools = "-p -h";
     usage.append(filename);
